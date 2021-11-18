@@ -49,8 +49,14 @@ router.get("/", (req: Request, res: Response) => {
     res.send(`
             <div>
                 <div>Please login</div>
+
                 <a href="/login">Login</a>
             </div>
         `)
   }
+})
+
+router.get("/logout", (req: Request, res: Response) => {
+  req.session = undefined
+  res.redirect("/")
 })

@@ -27,6 +27,10 @@ exports.router.get("/", function (req, res) {
         res.send("\n            <div>\n                <div>Successfully logged in</div>\n                <a href=\"/logout\">Logout</a>\n            </div>\n        ");
     }
     else {
-        res.send("\n            <div>\n                <div>Please login</div>\n                <a href=\"/login\">Login</a>\n            </div>\n        ");
+        res.send("\n            <div>\n                <div>Please login</div>\n\n                <a href=\"/login\">Login</a>\n            </div>\n        ");
     }
+});
+exports.router.get("/logout", function (req, res) {
+    req.session = undefined;
+    res.redirect("/");
 });
