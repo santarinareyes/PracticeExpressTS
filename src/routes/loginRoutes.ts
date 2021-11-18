@@ -1,6 +1,10 @@
 import { Router, Request, Response } from "express"
 
-const router = Router()
+interface RequestWithBodyParser extends Request {
+  body: { [key: string]: string | undefined }
+}
+
+export const router = Router()
 
 router.get("/login", (req: Request, res: Response) => {
   res.send(`
@@ -18,10 +22,12 @@ router.get("/login", (req: Request, res: Response) => {
   `)
 })
 
-router.post("/login", (req: Request, res: Response) => {
+router.post("/login", (req: RequestWithBodyParser, res: Response) => {
   const { email, password } = req.body
 
-  res.send(email + password)
+  if (email && password) {
+    res.send(email + password)
+  } else {
+    res.send("Both fields must be filled")
+  }
 })
-
-export { router }
