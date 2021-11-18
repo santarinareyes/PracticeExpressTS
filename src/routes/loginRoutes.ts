@@ -1,7 +1,21 @@
-import { Router, Request, Response } from "express"
+import { Router, Request, Response, NextFunction } from "express"
 
 interface RequestWithBodyParser extends Request {
   body: { [key: string]: string | undefined }
+}
+
+function requireAuth(req: Request, res: Response, next: NextFunction): void {
+  if (req?.session?.loggedIn) {
+    return next()
+  }
+
+  res.status(403)
+  res.send(`
+    <div>
+    <div>Wait... you are not permitted.</div>
+    <a href="/login">Login</a>
+    </div>
+  `)
 }
 
 export const router = Router()
@@ -49,7 +63,6 @@ router.get("/", (req: Request, res: Response) => {
     res.send(`
             <div>
                 <div>Please login</div>
-
                 <a href="/login">Login</a>
             </div>
         `)
@@ -59,4 +72,8 @@ router.get("/", (req: Request, res: Response) => {
 router.get("/logout", (req: Request, res: Response) => {
   req.session = undefined
   res.redirect("/")
+})
+
+router.get("/private", requireAuth, (req: Request, res: Response) => {
+  res.send("Woop woop, this is your private page")
 })
