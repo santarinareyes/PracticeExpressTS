@@ -26,8 +26,31 @@ router.post("/login", (req: RequestWithBodyParser, res: Response) => {
   const { email, password } = req.body
 
   if (email && password) {
-    res.send(email + password)
+    if (email === "correct@correct.com" && password === "correct") {
+      req.session = { loggedIn: true }
+      res.redirect("/")
+    } else {
+      res.send("Email or password is incorrect")
+    }
   } else {
     res.send("Both fields must be filled")
+  }
+})
+
+router.get("/", (req: Request, res: Response) => {
+  if (req?.session?.loggedIn) {
+    res.send(`
+            <div>
+                <div>Successfully logged in</div>
+                <a href="/logout">Logout</a>
+            </div>
+        `)
+  } else {
+    res.send(`
+            <div>
+                <div>Please login</div>
+                <a href="/login">Login</a>
+            </div>
+        `)
   }
 })

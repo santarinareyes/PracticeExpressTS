@@ -9,9 +9,24 @@ exports.router.get("/login", function (req, res) {
 exports.router.post("/login", function (req, res) {
     var _a = req.body, email = _a.email, password = _a.password;
     if (email && password) {
-        res.send(email + password);
+        if (email === "correct@correct.com" && password === "correct") {
+            req.session = { loggedIn: true };
+            res.redirect("/");
+        }
+        else {
+            res.send("Email or password is incorrect");
+        }
     }
     else {
         res.send("Both fields must be filled");
+    }
+});
+exports.router.get("/", function (req, res) {
+    var _a;
+    if ((_a = req === null || req === void 0 ? void 0 : req.session) === null || _a === void 0 ? void 0 : _a.loggedIn) {
+        res.send("\n            <div>\n                <div>Successfully logged in</div>\n                <a href=\"/logout\">Logout</a>\n            </div>\n        ");
+    }
+    else {
+        res.send("\n            <div>\n                <div>Please login</div>\n                <a href=\"/login\">Login</a>\n            </div>\n        ");
     }
 });
