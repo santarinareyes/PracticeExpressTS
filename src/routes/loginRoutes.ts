@@ -4,7 +4,7 @@ const router = Router()
 
 router.get("/login", (req: Request, res: Response) => {
   res.send(`
-    <form method="POST>
+    <form method="POST">
         <div>
             <label for="email">Email</label>
             <input type="email" name="email" />
@@ -16,6 +16,12 @@ router.get("/login", (req: Request, res: Response) => {
         </div>
     </form>
   `)
+})
+
+router.post("/login", (req: Request, res: Response) => {
+  const { email, password } = req.body
+
+  res.send(email + password)
 })
 
 export { router }
